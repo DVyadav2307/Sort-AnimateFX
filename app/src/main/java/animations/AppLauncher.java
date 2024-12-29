@@ -40,13 +40,42 @@ public class AppLauncher extends Application {
         primaryStage.show();
 
         new Thread(()->{
-            bubbleSort(sr.getData());
+           selectSort(sr.getData());
+        //    bubbleSort(sr.getData());
         }).start();
+    }
+
+    public void selectSort(ObservableList<Data<String,Number>> list){
+        try {
+            Thread.sleep(3000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        int length = list.size();
+        for(int i = 0; i < length-1; i++){
+            int small_id = i;
+            for(int j = i; j< length; j++){
+                if(list.get(small_id).getYValue().intValue() > 
+                   list.get(j).getYValue().intValue()){
+                    small_id = j;
+                }
+            }
+            if(small_id!=i){
+                var temp = list.get(i).getYValue();
+                list.get(i).setYValue(list.get(small_id).getYValue());
+                list.get(small_id).setYValue(temp);
+                try{
+                    Thread.sleep(25);     
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     public void bubbleSort(ObservableList<Data<String, Number>> list){
         try{
-		Thread.sleep(5000);
+		Thread.sleep(3000);
 	}catch(Exception e){
 		e.printStackTrace();
 	}
