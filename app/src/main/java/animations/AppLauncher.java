@@ -15,11 +15,13 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class AppLauncher extends Application {
+
     private CategoryAxis xAxis = new CategoryAxis();
     private NumberAxis yAxis = new NumberAxis();
     private BarChart<String, Number> bc = new BarChart<>(xAxis, yAxis);
     private XYChart.Series<String, Number> sr;
     private Alert alert = new Alert(AlertType.INFORMATION);
+    private ObservableList<Data<String,Number>> list;
 
     @Override
     public void start(Stage primaryStage){
@@ -37,8 +39,13 @@ public class AppLauncher extends Application {
         yAxis.setLabel("Elements");
 
         sr = new XYChart.Series<String, Number>();
+        list = sr.getData();
         for (int i = 0; i < 70; i++) {
-            sr.getData().add(new Data<String,Number>("arr["+i+"]", (int)(Math.random()*100)));
+            sr.getData().add(
+                new Data<String,Number>(
+                    "arr["+i+"]", (int)(Math.random()*100)
+                    )
+                );
         }
         bc.getData().add(sr);
         bc.setBarGap(0.5);
@@ -55,14 +62,56 @@ public class AppLauncher extends Application {
                 e.printStackTrace();
             }
 
-            insertSort(sr.getData());
-            // selectSort(sr.getData());
-            // bubbleSort(sr.getData());
+            quickSort(0, list.size()-1);
+            // insertSort();
+            // selectSort();
+            // bubbleSort();
+
+            informComplete();
 
         }).start();
     }
 
-    public void insertSort(ObservableList<Data<String,Number>> list){
+    public void quickSort(int lBound, int upBound){
+
+        if(lBound >= upBound) return;
+        int start = lBound;
+        int end = upBound;
+        int pivot = list.get(lBound).getYValue().intValue();
+
+        while(end > start){
+            while(start <= upBound &&
+            list.get(start).getYValue().intValue() <= pivot){
+                start++;
+            }
+            while( end >= lBound &&
+            list.get(end).getYValue().intValue() > pivot){
+                end--;
+            }
+            if(end < start) break;
+            var tmp = list.get(start).getYValue();
+            list.get(start).setYValue(list.get(end).getYValue());
+            list.get(end).setYValue(tmp);
+            try {
+                Thread.sleep(25);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        var tmp = list.get(lBound).getYValue();
+        list.get(lBound).setYValue(list.get(end).getYValue());
+        list.get(end).setYValue(tmp);
+        try {
+            Thread.sleep(25);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        quickSort(lBound, end-1);
+        quickSort(end+1, upBound);
+    }
+
+    public void insertSort(){
         
         int length = list.size();
         for(int i = 0; i<length; i++){
@@ -82,10 +131,9 @@ public class AppLauncher extends Application {
                 }
             }
         }
-        informComplete();
     }
 
-    public void selectSort(ObservableList<Data<String,Number>> list){
+    public void selectSort(){
         
         int length = list.size();
         for(int i = 0; i < length-1; i++){
@@ -107,16 +155,16 @@ public class AppLauncher extends Application {
                 }
             }
         }
-        informComplete();
     }
 
-    public void bubbleSort(ObservableList<Data<String, Number>> list){
+    public void bubbleSort(){
         
         int length = list.size();
         for(int j = 0; j < length-1; j++){
             var flag = true;
             for(int i =0; i < length-1-j; i++){
-                if(list.get(i).getYValue().intValue() > list.get(i+1).getYValue().intValue()){
+                if(list.get(i).getYValue().intValue() > 
+                   list.get(i+1).getYValue().intValue()){
                     //swap
                     var temp = list.get(i+1).getYValue();
                     list.get(i+1).setYValue(list.get(i).getYValue());
@@ -134,7 +182,6 @@ public class AppLauncher extends Application {
                 break;
             }
         }
-        informComplete();
     }
 
     public void informComplete(){
