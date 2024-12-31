@@ -19,3 +19,4 @@ let the gradle download its stuff. I should run after a while. In case of error,
 
  * Bubble Sort
  * Slection Sort
+ * Insertion Sort
