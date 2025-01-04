@@ -35,12 +35,12 @@ public class AppLauncher extends Application {
         alert.initOwner(primaryStage);
         alert.initModality(Modality.NONE);
 
-        xAxis.setLabel("Key-Values");
-        yAxis.setLabel("Elements");
+        yAxis.setLabel("Key-Values");
+        xAxis.setLabel("Elements");
 
         sr = new XYChart.Series<String, Number>();
         list = sr.getData();
-        for (int i = 0; i < 70; i++) {
+        for (int i = 0; i < 140; i++) {
             sr.getData().add(
                 new Data<String,Number>(
                     "arr["+i+"]", (int)(Math.random()*100)
@@ -62,7 +62,8 @@ public class AppLauncher extends Application {
                 e.printStackTrace();
             }
 
-            quickSort(0, list.size()-1);
+            mergeSort();
+            // quickSort();
             // insertSort();
             // selectSort();
             // bubbleSort();
@@ -71,8 +72,58 @@ public class AppLauncher extends Application {
 
         }).start();
     }
+    
+    public void mergeSort(){
+        partition(0, list.size()-1);
+    }
+    public void partition(int lbound, int upbound){
 
-    public void quickSort(int lBound, int upBound){
+        if(lbound == upbound) return;
+        int mid = lbound + (upbound - lbound)/2;
+        partition(lbound, mid);
+        partition(mid + 1, upbound);
+        merge(lbound, mid, upbound);
+    }
+    public void merge(int lbound, int mid, int upBound){
+
+        int size = upBound - lbound + 1;
+        Number[] narr = new Number[size];
+        int lptr, rptr, i = 0;
+        lptr = lbound; rptr = mid + 1;
+        while(lptr < mid +1 && rptr < upBound +1){
+            if(list.get(lptr).getYValue().intValue() <=
+            list.get(rptr).getYValue().intValue()){
+                narr[i] = list.get(lptr).getYValue();
+                lptr++;
+            }else{
+                narr[i] = list.get(rptr).getYValue();
+                rptr++;
+            }
+            i++;
+        }
+        while(lptr < mid +1){
+            narr[i] = list.get(lptr).getYValue();
+            lptr++; i++;
+        }
+        while(rptr < upBound +1){
+            narr[i] = list.get(rptr).getYValue();
+            rptr++; i++;
+        }
+        for(i = 0; i < size; i++){
+            list.get(lbound + i).setYValue(narr[i]) ;
+            try {
+                Thread.sleep(20);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void quickSort(){
+        quickSortHelper(0, list.size()-1);
+    }
+    public void quickSortHelper(int lBound, int upBound){
 
         if(lBound >= upBound) return;
         int start = lBound;
@@ -93,7 +144,7 @@ public class AppLauncher extends Application {
             list.get(start).setYValue(list.get(end).getYValue());
             list.get(end).setYValue(tmp);
             try {
-                Thread.sleep(25);
+                Thread.sleep(100);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -102,13 +153,13 @@ public class AppLauncher extends Application {
         list.get(lBound).setYValue(list.get(end).getYValue());
         list.get(end).setYValue(tmp);
         try {
-            Thread.sleep(25);
+            Thread.sleep(1);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        quickSort(lBound, end-1);
-        quickSort(end+1, upBound);
+        quickSortHelper(lBound, end-1);
+        quickSortHelper(end+1, upBound);
     }
 
     public void insertSort(){
@@ -185,7 +236,7 @@ public class AppLauncher extends Application {
     }
 
     public void informComplete(){
-        Platform.runLater(()->alert.show());
+       Platform.runLater(()->alert.show());
     }
 
     public static void main(String[] args) {
