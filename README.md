@@ -13,7 +13,7 @@ Run the gradlew script file (permission maybe needed) into the Project root fold
     ./gradlew run
 ```
 
-let the gradle download its stuff. I should run after a while. In case of error, you may like to share it with me..
+let the gradle download its stuff. I should run after a while. In case of error, you may like to share it with me.
 
 ## Algos Implemented
 
