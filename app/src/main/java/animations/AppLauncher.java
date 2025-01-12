@@ -62,17 +62,68 @@ public class AppLauncher extends Application {
                 e.printStackTrace();
             }
 
+            // heapSort();
             mergeSort();
             // quickSort();
             // insertSort();
             // selectSort();
-            // bubbleSort();
+            //  bubbleSort();
 
             informComplete();
 
         }).start();
     }
     
+    public void heapSort(){
+        int size = list.size();
+        for(int i = (size-2)/2; i >= 0; i--){
+            heapifyDown(size, i);
+        }
+        for(int i = size-1; i > 0; i--){
+            var temp = list.get(0).getYValue();
+            list.get(0).setYValue(
+                list.get(i).getYValue()
+            );
+            list.get(i).setYValue(temp);
+            try {
+                Thread.sleep(10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            heapifyDown(i, 0);
+        }
+    }
+    void heapifyDown(int size, int i){
+        int lchild = 2*i + 1;
+        int rchild = 2*i + 2;
+        int largest = i;
+        if(lchild < size && 
+            list.get(largest)
+            .getYValue().intValue() < list.get(lchild)
+                                      .getYValue().intValue()){
+                                        largest = lchild;
+                                      }
+        if(rchild < size && 
+            list.get(largest)
+            .getYValue().intValue() < list.get(rchild)
+                                      .getYValue().intValue()){
+                                        largest = rchild;
+                                      }
+        if(largest != i){
+            var temp  = list.get(largest).getYValue();
+            list.get(largest).setYValue(
+                list.get(i).getYValue()
+            );
+            list.get(i).setYValue(temp);
+            try {
+                Thread.sleep(10);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            heapifyDown(size, largest);
+        }
+    }
+
     public void mergeSort(){
         partition(0, list.size()-1);
     }
